@@ -5,13 +5,30 @@
 This project is a graphics API for DirectX 11.0 that makes the Direct3D interface easier to use. <br/>
 Features include:
 - Phong Lighting system
-- Simplified rendering
+- [Simplified Rendering](https://github.com/odzyoba4/DXGraphicsAPI/edit/main/README.md#graphics-objects)
 - Custom terrain with heightmaps
 
 ## Graphics Objects
-One of the features I implemented is 
+One of the features I implemented is a GraphicsObject class that performed dealing with shader, texture, and model data under one centralized render call: 
+```
+void GraphicsObject_TextureLight::Render() {
+	//Set vertex and index buffer to context through Model
+	pModel->SetToContext(pShader->GetContext());
+
+	//Per mesh, connect the corresponding texture, world matrix, and material properties
+	for (int i = 0; i < pModel->GetMeshCount(); i++) {
+		pShader->SetTexture(MeshTextures[i]);
+		pShader->SendWorldAndMaterial(World, MeshMatAmbient[i], MeshMatDiffuse[i], MeshMatSpecular[i]);
+		pModel->RenderMesh(pShader->GetContext(), i);
+	}
+}
+```
+This simplified the draw stage because users would place all necessary data during initialization into the Graphics Object, and during the Render() call, data such as per-mesh material properties or textures would just be connected to the shader to activate the pipeline.
+<br/> The Graphics Object had multiple derived classes for each type of shader, making it easier to automatically connect the necessary shader-specific data during rendering:
+![GraphicsObject](/images/GraphicsObject.png)
+
 ## Mirror
-One of the features I implemented is a mirror effect, where the illusion of reflection is given by rendering objects from one side of the mirror twice. <br/>
+Another feature I implemented is a mirror effect, where the illusion of reflection is given by rendering objects from one side of the mirror twice. <br/>
 Youtube Demo: <br/>
 [![MirrorDemo](https://img.youtube.com/vi/eR4eGSRtDbU/0.jpg)](https://www.youtube.com/watch?v=eR4eGSRtDbU) <br>
 While costly when used for a real scene, this effect got me to be familiar with using the stencil buffer for multiple renders. To do this effect, I created a special mirror class that would handle different rasterizer states, blend states, and depth stencil states.
