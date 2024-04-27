@@ -3,12 +3,15 @@
 ![Graphics Scene](/images/FinalScene.png)
 ## Overview
 This project is a graphics API for DirectX 11.0 that makes the Direct3D interface easier to use. <br/>
-<!---
+
 Features include:
-- Phong Lighting system
-- Simplified Rendering
-- Custom terrain with heightmaps
--->
+- Phong Lighting system with directional, point, and spot lights
+- Simplified Rendering (GraphicsObjects)
+- Custom terrain with heightmap images
+- Import custom model from file
+- Shader classes to handle texture, light, and color data
+- Mirror and fog effects
+
 ## Graphics Objects
 One of the features I implemented is a GraphicsObject class that performed dealing with shader, texture, and model data under one centralized render call: 
 ```C++
